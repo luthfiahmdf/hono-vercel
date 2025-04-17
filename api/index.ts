@@ -3,6 +3,7 @@ import { serve } from '@hono/node-server';
 import { handle } from '@hono/node-server/vercel';
 import { cors } from 'hono/cors';
 import usersRouter from './routes/users.js';
+import authRouter from './routes/auth.js';
 
 const app = new Hono();
 
@@ -19,7 +20,8 @@ app.use('/*', cors({
 // Root route
 app.get('/', (c) => c.json({ message: 'Welcome to Hono API' }));
 
-// Mount users router
+// Mount routers
+app.route('/auth', authRouter);
 app.route('/users', usersRouter);
 
 // Development server
