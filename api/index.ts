@@ -1,9 +1,20 @@
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { handle } from '@hono/node-server/vercel';
+import { cors } from 'hono/cors';
 import usersRouter from './routes/users.js';
 
 const app = new Hono();
+
+// Enable CORS
+app.use('/*', cors({
+  origin: '*',
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  exposeHeaders: ['Content-Length', 'X-Requested-With'],
+  maxAge: 600,
+  credentials: true,
+}));
 
 // Root route
 app.get('/', (c) => c.json({ message: 'Welcome to Hono API' }));
