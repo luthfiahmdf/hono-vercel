@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import type { User } from '../db/schema';
-import * as userController from '../controllers/users';
+import type { User } from '../db/schema.js';
+import * as userController from '../controllers/users.js';
 
 const usersRouter = new Hono();
 

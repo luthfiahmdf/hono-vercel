@@ -1,6 +1,6 @@
-import { db } from '../db';
-import { users } from '../db/schema';
-import type { NewUser, User } from '../db/schema';
+import { db } from '../db/index.js';
+import { users } from '../db/schema.js';
+import type { NewUser, User } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
 
 export async function getAllUsers(): Promise<User[]> {

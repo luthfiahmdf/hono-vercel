@@ -6,8 +6,8 @@
   "main": "api/index.ts",
   "scripts": {
     "dev": "bun run --watch api/dev.ts",
-    "build": "tsc && tsc-alias",
-    "vercel-build": "tsc && tsc-alias",
+    "build": "tsc",
+    "vercel-build": "tsc",
     "start": "bun run api/dev.ts"
   },
   "keywords": [],
@@ -24,7 +24,6 @@
     "@types/node": "^20.17.30",
     "@types/pg": "^8.11.13",
     "drizzle-kit": "^0.20.18",
-    "tsc-alias": "^1.8.8",
     "typescript": "^5.8.3",
     "vercel": "^32.7.2"
   }

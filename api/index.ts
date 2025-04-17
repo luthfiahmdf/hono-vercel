@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { handle } from '@hono/node-server/vercel';
-import usersRouter from './routes/users';
+import usersRouter from './routes/users.js';
 
 const app = new Hono();
 
