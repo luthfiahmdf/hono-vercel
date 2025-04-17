@@ -10,7 +10,9 @@
     "outDir": "dist",
     "rootDir": "api",
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "resolveJsonModule": true
   },
   "include": ["api/**/*"],
   "exclude": ["node_modules", "dist"]

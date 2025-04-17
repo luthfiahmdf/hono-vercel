@@ -6,7 +6,8 @@
   "main": "api/index.ts",
   "scripts": {
     "dev": "bun run --watch api/dev.ts",
-    "build": "bun build ./api/index.ts --outdir ./dist --target node",
+    "build": "tsc",
+    "vercel-build": "tsc",
     "start": "bun run api/dev.ts"
   },
   "keywords": [],
