@@ -1,70 +1,88 @@
-import { Hono } from 'hono';
-import * as bookController from '../controllers/books.js';
+import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
+import * as bookController from "../controllers/books.ts";
+import { requireAuth } from "../middleware/jwt.ts";
 
 const booksRouter = new Hono();
 
-// Get all books
-booksRouter.get('/', async (c) => {
-  const allBooks = await bookController.getAllBooks();
-  return c.json(allBooks);
-});
-
-// Get book by id
-booksRouter.get('/:id', async (c) => {
-  const id = c.req.param('id');
-  const book = await bookController.getBookById(id);
-  if (!book) {
-    return c.json({ error: 'Book not found' }, 404);
+// Get all books - tidak memerlukan autentikasi
+booksRouter.get("/", async (c) => {
+  try {
+    const allBooks = await bookController.getAllBooks();
+    return c.json(allBooks);
+  } catch (error) {
+    throw new HTTPException(500, { message: "Internal server error" });
   }
-  return c.json(book);
 });
 
-// Create book
-booksRouter.post('/', async (c) => {
+// Get book by id - tidak memerlukan autentikasi
+booksRouter.get("/:id", async (c) => {
+  try {
+    const id = c.req.param("id");
+    const book = await bookController.getBookById(id);
+    if (!book) {
+      throw new HTTPException(404, { message: "Book not found" });
+    }
+    return c.json(book);
+  } catch (error) {
+    if (error instanceof HTTPException) throw error;
+    throw new HTTPException(500, { message: "Internal server error" });
+  }
+});
+
+// Create book - memerlukan autentikasi
+booksRouter.post("/", requireAuth, async (c) => {
   try {
     const body = await c.req.json();
     const newBook = await bookController.createBook(body);
     return c.json(newBook, 201);
   } catch (error) {
-    return c.json({ error: 'Invalid request body' }, 400);
+    if (error instanceof HTTPException) throw error;
+    throw new HTTPException(400, { message: "Invalid request body" });
   }
 });
 
-// Update book (PATCH)
-booksRouter.patch('/:id', async (c) => {
+// Update book - memerlukan autentikasi
+booksRouter.patch("/:id", requireAuth, async (c) => {
   try {
-    const id = c.req.param('id');
+    const id = c.req.param("id");
     const body = await c.req.json();
     const updatedBook = await bookController.updateBook(id, body);
     if (!updatedBook) {
-      return c.json({ error: 'Book not found' }, 404);
+      throw new HTTPException(404, { message: "Book not found" });
     }
     return c.json(updatedBook);
   } catch (error) {
-    return c.json({ error: 'Invalid request body' }, 400);
+    if (error instanceof HTTPException) throw error;
+    throw new HTTPException(400, { message: "Invalid request body" });
   }
 });
 
-// Delete book
-booksRouter.delete('/:id', async (c) => {
-  const id = c.req.param('id');
-  const deletedBook = await bookController.deleteBook(id);
-  if (!deletedBook) {
-    return c.json({ error: 'Book not found' }, 404);
+// Delete book - memerlukan autentikasi
+booksRouter.delete("/:id", requireAuth, async (c) => {
+  try {
+    const id = c.req.param("id");
+    const deletedBook = await bookController.deleteBook(id);
+    if (!deletedBook) {
+      throw new HTTPException(404, { message: "Book not found" });
+    }
+    return c.json({ message: "Book deleted successfully" });
+  } catch (error) {
+    if (error instanceof HTTPException) throw error;
+    throw new HTTPException(500, { message: "Internal server error" });
   }
-  return c.json({ message: 'Book deleted successfully' });
 });
 
 // Get books by category
-booksRouter.get('/category/:categoryId', async (c) => {
-  const categoryId = c.req.param('categoryId');
+booksRouter.get("/category/:categoryId", async (c) => {
+  const categoryId = c.req.param("categoryId");
   const booksByCategory = await bookController.getBooksByCategory(categoryId);
   return c.json(booksByCategory);
 });
 
 // Get books by source
-booksRouter.get('/source/:sourceId', async (c) => {
-  const sourceId = c.req.param('sourceId');
+booksRouter.get("/source/:sourceId", async (c) => {
+  const sourceId = c.req.param("sourceId");
   const booksBySource = await bookController.getBooksBySource(sourceId);
   return c.json(booksBySource);
 });

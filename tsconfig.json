@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ESNext",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "verbatimModuleSyntax": true,
     "esModuleInterop": true,
     "strict": true,
-    "lib": ["ES2020"],
+    "lib": ["ESNext"],
     "types": ["@types/node"],
     "outDir": "dist",
     "rootDir": "api",

@@ -1,8 +1,10 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { v4 as uuid4 } from "uuid";
 export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuid4()),
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
   password: text("password").notNull(),
