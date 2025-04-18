@@ -4,6 +4,9 @@ import { handle } from '@hono/node-server/vercel';
 import { cors } from 'hono/cors';
 import usersRouter from './routes/users.js';
 import authRouter from './routes/auth.js';
+import booksRouter from './routes/books.js';
+import categoriesRouter from './routes/categories.js';
+import bookSourcesRouter from './routes/bookSources.js';
 
 const app = new Hono();
 
@@ -23,6 +26,9 @@ app.get('/', (c) => c.json({ message: 'Welcome to Hono API' }));
 // Mount routers
 app.route('/auth', authRouter);
 app.route('/users', usersRouter);
+app.route('/books', booksRouter);
+app.route('/categories', categoriesRouter);
+app.route('/book-sources', bookSourcesRouter);
 
 // Development server
 if (process.env.NODE_ENV !== 'production') {
