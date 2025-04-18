@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import { db } from "../db/index.js";
-import { categories, type Category, type NewCategory } from "../db/schema.js";
+import { db } from "../db/index.ts";
+import { categories, type Category, type NewCategory } from "../db/schema.ts";
 
 export const createCategory = async (categoryData: Omit<NewCategory, "id" | "createdAt" | "updatedAt">) => {
   const newCategory = await db.insert(categories).values(categoryData).returning();

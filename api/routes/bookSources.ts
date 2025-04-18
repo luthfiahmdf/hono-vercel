@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
-import * as bookSourceController from '../controllers/bookSources.js';
+import * as bookSourceController from '../controllers/bookSources.ts';
 
 const bookSourcesRouter = new Hono();
 

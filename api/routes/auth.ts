@@ -1,6 +1,8 @@
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
-import * as authController from '../controllers/auth.js';
+import { sign } from 'hono/jwt';
+import * as authController from '../controllers/auth.ts';
+
 
 const authRouter = new Hono();
 
@@ -18,7 +20,17 @@ authRouter.post('/login', async (c) => {
       throw new HTTPException(401, { message: 'Invalid email or password' });
     }
 
-    return c.json(user);
+    // Generate JWT token
+    const token = await sign({
+      userId: user.id,
+      email: user.email,
+      name: user.name
+    }, process.env.JWT_SECRET);
+
+    return c.json({
+      user,
+      token
+    });
   } catch (error) {
     if (error instanceof HTTPException) throw error;
     throw new HTTPException(400, { message: 'Invalid request body' });

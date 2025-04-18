@@ -2,15 +2,16 @@ import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { handle } from '@hono/node-server/vercel';
 import { cors } from 'hono/cors';
-import usersRouter from './routes/users.js';
-import authRouter from './routes/auth.js';
-import booksRouter from './routes/books.js';
-import categoriesRouter from './routes/categories.js';
-import bookSourcesRouter from './routes/bookSources.js';
+import usersRouter from './routes/users.ts';
+import authRouter from './routes/auth.ts';
+import booksRouter from './routes/books.ts';
+import categoriesRouter from './routes/categories.ts';
+import bookSourcesRouter from './routes/bookSources.ts';
+
 
 const app = new Hono();
 
-// Enable CORS
+// Enable CORS untuk semua route
 app.use('/*', cors({
   origin: '*',
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -24,11 +25,11 @@ app.use('/*', cors({
 app.get('/', (c) => c.json({ message: 'Welcome to Hono API' }));
 
 // Mount routers
-app.route('/auth', authRouter);
-app.route('/users', usersRouter);
-app.route('/books', booksRouter);
-app.route('/categories', categoriesRouter);
-app.route('/book-sources', bookSourcesRouter);
+app.route('/api/auth', authRouter);
+app.route('/api/users', usersRouter);
+app.route('/api/books', booksRouter);
+app.route('/api/categories', categoriesRouter);
+app.route('/api/book-sources', bookSourcesRouter);
 
 // Development server
 if (process.env.NODE_ENV !== 'production') {

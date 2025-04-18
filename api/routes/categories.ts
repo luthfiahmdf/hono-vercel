@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
-import * as categoryController from '../controllers/categories.js';
+import * as categoryController from '../controllers/categories.ts';
 
 const categoriesRouter = new Hono();
 

@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import { db } from "../db/index.js";
-import { books, type TBook, type NewBook } from "../db/schema.js";
+import { db } from "../db/index.ts";
+import { books, type TBook, type NewBook } from "../db/schema.ts";
 
 export const createBook = async (bookData: Omit<NewBook, "id" | "createdAt" | "updatedAt">) => {
   const newBook = await db.insert(books).values(bookData).returning();
