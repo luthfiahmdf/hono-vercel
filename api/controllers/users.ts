@@ -4,9 +4,14 @@ import type { NewUser, User } from "../db/schema.ts";
 import { eq } from "drizzle-orm";
 import { hash } from "bcrypt";
 
+export async function getAllUsers(): Promise<User[]> {
+  return await db.select().from(users);
+}
 
-
-
+export async function getUserById(id: string): Promise<User | null> {
+  const [user] = await db.select().from(users).where(eq(users.id, id));
+  return user || null;
+}
 
 export async function createUser(
   userData: Omit<NewUser, "id" | "createdAt" | "updatedAt">
@@ -16,7 +21,7 @@ export async function createUser(
   const hashedPassword = await hash(userData.password, saltRounds);
 
   // Create new user with hashed password
-  const result = await db
+  const [newUser] = await db
     .insert(users)
     .values({
       ...userData,
@@ -24,7 +29,7 @@ export async function createUser(
     })
     .returning();
 
-  return result[0];
+  return newUser;
 }
 
 export async function updateUser(
@@ -37,15 +42,15 @@ export async function updateUser(
     userData.password = await hash(userData.password, saltRounds);
   }
 
-  const result = await db
+  const [updatedUser] = await db
     .update(users)
     .set({ ...userData, updatedAt: new Date() })
     .where(eq(users.id, id))
     .returning();
-  return result[0] || null;
+  return updatedUser || null;
 }
 
 export async function deleteUser(id: string): Promise<User | null> {
-  const result = await db.delete(users).where(eq(users.id, id)).returning();
-  return result[0] || null;
+  const [deletedUser] = await db.delete(users).where(eq(users.id, id)).returning();
+  return deletedUser || null;
 }
